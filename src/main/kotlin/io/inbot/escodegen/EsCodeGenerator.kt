@@ -131,7 +131,7 @@ class SuspendingActionListener<T>(private val continuation: Continuation<T>) :
     }
 
     private fun generateCodeForClientClass(clazz: Class<*>): FileSpec {
-        val fileSpecBuilder = FileSpec.builder(clazz.packageName, "${clazz.simpleName}Ext")
+        val fileSpecBuilder = FileSpec.builder(clazz.getPackage().name, "${clazz.simpleName}Ext")
         fileSpecBuilder.addImport(sharedCodePackageName, "SuspendingActionListener.Companion.suspending")
 
         fileSpecBuilder.addComment(genByComment.trimIndent())

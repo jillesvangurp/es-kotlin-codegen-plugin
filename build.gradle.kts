@@ -19,6 +19,8 @@ repositories {
     mavenCentral()
 }
 
+group = "com.github.jillesvangurp"
+version = "1.0"
 
 // compile bytecode to java 8 (default is java 6)
 tasks.withType<KotlinCompile> {
@@ -52,9 +54,13 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
-group = "com.github.jillesvangurp"
-version = "1.0"
 
+tasks.withType<KotlinCompile> {
+    dependsOn("codegen")
+    kotlinOptions.jvmTarget = "1.8"
+    this.sourceFilesExtensions
+
+}
 gradlePlugin {
     plugins {
         create("codegen") {
