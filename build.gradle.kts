@@ -36,7 +36,7 @@ configure<CheckForbiddenApisExtension> {
 }
 
 dependencies {
-    compile("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.4.0")
+    compile("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.4.2")
     compile("org.reflections:reflections:0.9.11")
     implementation("com.squareup:kotlinpoet:1.4.0")
 
@@ -56,11 +56,11 @@ dependencies {
 
 
 tasks.withType<KotlinCompile> {
-    dependsOn("codegen")
     kotlinOptions.jvmTarget = "1.8"
     this.sourceFilesExtensions
 
 }
+
 gradlePlugin {
     plugins {
         create("codegen") {
