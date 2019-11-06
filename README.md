@@ -1,3 +1,6 @@
+[![](https://jitpack.io/v/jillesvangurp/es-kotlin-codegen-plugin.svg)](https://jitpack.io/#jillesvangurp/es-kotlin-codegen-plugin)
+[![Actions Status](https://github.com/jillesvangurp/es-kotlin-codegen-plugin/workflows/CI-gradle-build/badge.svg)](https://github.com/jillesvangurp/es-kotlin-codegen-plugin/actions)
+
 ## Introduction
 
 This gradle project is intended for use by the 
