@@ -10,7 +10,7 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v1
       with:
-        java-version: '13.0.1'
+        java-version: '12.0.2'
     - name: Cache build .gradle dir
       uses: actions/cache@v1
       with:
