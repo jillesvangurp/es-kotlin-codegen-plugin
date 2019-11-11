@@ -5,6 +5,9 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterSpec
 import org.elasticsearch.client.RequestOptions
+import org.reflections.Reflections
+import org.reflections.scanners.MethodParameterNamesScanner
+import org.reflections.scanners.SubTypesScanner
 import java.io.File
 import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
@@ -18,26 +21,44 @@ private val genByComment = """
 
 class EsCodeGenerator(
     private val sourceDir: String = "build/generated-kotlin-code",
-    private val esRestClientReflectService: EsRestClientReflectService = EsRestClientReflectService(),
-    private val sharedCodePackageName: String = "io.inbot.eskotlinwrapper"
+    private val sharedCodePackageName: String = "io.inbot.eskotlinwrapper",
+    private val classLoader: ClassLoader = Thread.currentThread().contextClassLoader
 ) {
+
     fun generateCode() {
-        val sharedCodePath = File(sourceDir + File.separatorChar + sharedCodePackageName.replace('.', File.separatorChar))
+        val sharedCodePath =
+            File(sourceDir + File.separatorChar + sharedCodePackageName.replace('.', File.separatorChar))
         // create the directory if it did not exist
         sharedCodePath.mkdirs()
         println(sharedCodePath.absolutePath)
 
-        File(sharedCodePath.absolutePath,"SuspendingActionListener.kt").writeText(generateActionListener(sharedCodePackageName))
+        File(sharedCodePath.absolutePath, "SuspendingActionListener.kt").writeText(
+            generateActionListener(
+                sharedCodePackageName
+            )
+        )
 
-        generateActionListener(sharedCodePackageName)
         val directory = File(sourceDir).absoluteFile
-        esRestClientReflectService.listCLientClasses().map {
+        processAsyncClientMethods(directory)
+
+
+        processQueryDslBuilderConstructors(directory)
+    }
+
+
+    private fun processAsyncClientMethods(directory: File) {
+        val asyncClientReflections = Reflections("org.elasticsearch.client", SubTypesScanner(false))
+        asyncClientReflections.allTypes.filter {
+            it.endsWith("Client")
+                    // two exceptions
+                    && !it.startsWith("org.elasticsearch.client.Client")
+                    && !it.endsWith("RestClient")
+        }.map { this.classLoader.loadClass(it) }.map {
             println(it.name)
             generateCodeForClientClass(it)
+        }.forEach {
+            it.writeTo(directory.toPath())
         }
-            .forEach {
-                it.writeTo(directory.toPath())
-            }
     }
 
     fun generateActionListener(sharedCodePackageName: String) = """
@@ -138,50 +159,57 @@ class SuspendingActionListener<T>(private val continuation: Continuation<T>) :
         clazz.methods
             .filter { it.name.endsWith("Async") }
             // don't generate code for deprecated methods
-            .filter { method -> method.annotations.firstOrNull { !(it.javaClass == Deprecated::class || it.javaClass == java.lang.Deprecated::class) } == null}
+            .filter { method -> method.annotations.firstOrNull { !(it.javaClass == Deprecated::class || it.javaClass == java.lang.Deprecated::class) } == null }
             // java.lang.Boolean vs. kotlin.Boolean seems to break things; affects only a few methods
             .filter {
-                val returnType  = getTypeParameter(it.parameters[it.parameterCount-1])
+                val returnType = getTypeParameter(it.parameters[it.parameterCount - 1])
                 !(returnType == java.lang.Boolean::class.java || returnType == Boolean::class.java)
             }
             .forEach {
-            println("generating async method for ${it.name}")
-            try {
+                println("generating async method for ${it.name}")
+                try {
 
-                when (it.parameterCount) {
-                    2 -> {
-                        // api call without a request body
-                        val actionListenerTypeArg = getTypeParameter(it.parameters[1])
-                        fileSpecBuilder.addFunction(suspendingAsyncFunSpec(clazz, it.name, null, actionListenerTypeArg))
+                    when (it.parameterCount) {
+                        2 -> {
+                            // api call without a request body
+                            val actionListenerTypeArg = getTypeParameter(it.parameters[1])
+                            fileSpecBuilder.addFunction(
+                                suspendingAsyncFunSpec(
+                                    clazz,
+                                    it.name,
+                                    null,
+                                    actionListenerTypeArg
+                                )
+                            )
 
 //                        println("${clazz.name}.${it.name}: void -> $actionListenerTypeArg")
-                    }
-                    3 -> {
-                        // api call with a request body
+                        }
+                        3 -> {
+                            // api call with a request body
 
-                        val requestParamType = it.parameters[0].type
+                            val requestParamType = it.parameters[0].type
 
-                        val actionListenerTypeArg = getTypeParameter(it.parameters[2])
-                        fileSpecBuilder.addFunction(
-                            suspendingAsyncFunSpec(
-                                clazz,
-                                it.name,
-                                requestParamType,
-                                actionListenerTypeArg
+                            val actionListenerTypeArg = getTypeParameter(it.parameters[2])
+                            fileSpecBuilder.addFunction(
+                                suspendingAsyncFunSpec(
+                                    clazz,
+                                    it.name,
+                                    requestParamType,
+                                    actionListenerTypeArg
+                                )
                             )
-                        )
 
 //                        println("${clazz.name}.${it.name}: $requestParamType -> $actionListenerTypeArg")
 
+                        }
+                        else -> {
+                            println("unhandled method ${it.name} in ${clazz.name} with param count ${it.parameterCount}")
+                        }
                     }
-                    else -> {
-                        println("unhandled method ${it.name} in ${clazz.name} with param count ${it.parameterCount}")
-                    }
+                } catch (e: Exception) {
+                    println("${clazz.name}.${it.name} is weird")
                 }
-            } catch (e: Exception) {
-                println("${clazz.name}.${it.name} is weird")
             }
-        }
         return fileSpecBuilder.build()
     }
 
@@ -191,4 +219,29 @@ class SuspendingActionListener<T>(private val continuation: Continuation<T>) :
         val actionListenerTypeArg = parameterizedType.actualTypeArguments[0]
         return actionListenerTypeArg ?: throw IllegalStateException("no type found")
     }
+
+    private fun processQueryDslBuilderConstructors(directory: File) {
+        val queryDslBuilderReflections = Reflections(
+            "org.elasticsearch.index.query",
+            MethodParameterNamesScanner(), SubTypesScanner(false)
+        )
+        queryDslBuilderReflections.allTypes.filter {
+            it.endsWith("Builder")
+        }.map {
+            this.classLoader.loadClass(it)
+        }.map {
+            println(it.name)
+            it.constructors.forEach { c ->
+                println("${c.name} (")
+                val realNames = queryDslBuilderReflections.getConstructorParamNames(c)
+                var i = 0
+                c.parameters.forEach { p ->
+                    println("\t${realNames[i++]}: ${p.type.name}}")
+
+                }
+                println(")")
+            }
+        }
+    }
+
 }
