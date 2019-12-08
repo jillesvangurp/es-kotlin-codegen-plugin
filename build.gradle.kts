@@ -5,9 +5,10 @@ import de.thetaphi.forbiddenapis.gradle.CheckForbiddenApisExtension
 
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.50"
+    id("org.jetbrains.kotlin.jvm") version "1.3.61"
     id("com.diffplug.gradle.spotless") version "3.25.0"
     id("org.jetbrains.dokka") version "0.9.18"
+    id("com.github.ben-manes.versions") version "0.27.0"
     java
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
@@ -36,7 +37,7 @@ configure<CheckForbiddenApisExtension> {
 }
 
 dependencies {
-    compile("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.4.2")
+    compile("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.0")
     compile("org.reflections:reflections:0.9.11")
     implementation("com.squareup:kotlinpoet:1.4.0")
 
