@@ -75,13 +75,12 @@ class SuspendingActionListener<T>(private val continuation: Continuation<T>) :
          * }
          * ```
          */
-        suspend fun <T : Any> suspending(block: (SuspendingActionListener<T>) -> Unit): T {
-            return suspendCancellableCoroutine {
-                it.invokeOnCancellation {
-                    // TODO blocked on https://github.com/elastic/elasticsearch/issues/44802
-                    // given where the ticket is going we probably grab the cancellation token and pass it into suspending so we can call cancel here.
+        suspend fun <T : Any> suspending(block: (SuspendingActionListener<T>) -> Cancellable): T {
+            return suspendCancellableCoroutine { continuation ->
+                val cancellable = block.invoke(SuspendingActionListener(continuation))
+                continuation.invokeOnCancellation { _ ->
+                    cancellable.cancel()
                 }
-                block.invoke(SuspendingActionListener(it))
             }
         }
     }
