@@ -37,8 +37,8 @@ configure<CheckForbiddenApisExtension> {
 }
 
 dependencies {
-    compile("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.0")
-    compile("org.reflections:reflections:0.9.11")
+    api("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.0")
+    implementation("org.reflections:reflections:0.9.11")
     implementation("com.squareup:kotlinpoet:1.4.0")
 
     // Align versions of all Kotlin components
