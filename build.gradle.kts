@@ -38,6 +38,7 @@ configure<CheckForbiddenApisExtension> {
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.0")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.2")
     implementation("org.reflections:reflections:0.9.11")
     implementation("com.squareup:kotlinpoet:1.4.0")
 
