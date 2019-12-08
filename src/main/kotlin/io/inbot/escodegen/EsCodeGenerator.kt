@@ -4,6 +4,7 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterSpec
+import org.elasticsearch.client.Cancellable
 import org.elasticsearch.client.RequestOptions
 import java.io.File
 import java.lang.reflect.Parameter
@@ -47,10 +48,11 @@ $genByComment
 
 package $sharedCodePackageName
 
-import kotlinx.coroutines.suspendCancellableCoroutine
-import org.elasticsearch.action.ActionListener
 import java.lang.Exception
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.Continuation
+import org.elasticsearch.action.ActionListener
+import org.elasticsearch.client.Cancellable
 
 /**
  * Action listener that can be used with to adapt the async methods across the java client to co-routines.
@@ -86,7 +88,7 @@ class SuspendingActionListener<T>(private val continuation: Continuation<T>) :
     }
 }
 """
-
+    val c = Cancellable::class
     private fun suspendingAsyncFunSpec(
         extensionClass: Class<*>,
         name: String,
