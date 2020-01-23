@@ -6,7 +6,7 @@ import de.thetaphi.forbiddenapis.gradle.CheckForbiddenApisExtension
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.61"
-    id("com.diffplug.gradle.spotless") version "3.26.1"
+    id("com.diffplug.gradle.spotless") version "3.27.1"
     id("org.jetbrains.dokka") version "0.10.0"
     id("com.github.ben-manes.versions") version "0.27.0" // gradle dependencyUpdates -Drevision=release
     java
@@ -38,9 +38,9 @@ configure<CheckForbiddenApisExtension> {
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.5.2")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.2")
-    implementation("org.reflections:reflections:0.9.11")
-    implementation("com.squareup:kotlinpoet:1.4.4")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.3")
+    implementation("org.reflections:reflections:0.9.12")
+    implementation("com.squareup:kotlinpoet:1.5.0")
 
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
