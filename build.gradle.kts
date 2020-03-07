@@ -1,11 +1,17 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.publish.PublishingExtension
-// ignore intellij not finding this import, works fine. Just intellij being buggy as F***
-import de.thetaphi.forbiddenapis.gradle.CheckForbiddenApisExtension
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:9.2.1")
+    }
+}
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.61"
+    id("org.jetbrains.kotlin.jvm") version "1.3.70"
     id("com.diffplug.gradle.spotless") version "3.27.1"
     id("org.jetbrains.dokka") version "0.10.1"
     id("com.github.ben-manes.versions") version "0.27.0" // gradle dependencyUpdates -Drevision=release
@@ -13,8 +19,9 @@ plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
     `maven-publish`
-    id("de.thetaphi.forbiddenapis") version "2.7"
 }
+
+apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
 repositories {
     mavenCentral()
@@ -28,16 +35,12 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-configure<CheckForbiddenApisExtension> {
-    // https://github.com/policeman-tools/forbidden-apis/wiki/GradleUsage
-    bundledSignatures = setOf("jdk-unsafe-9", "jdk-deprecated-9", "jdk-non-portable", "jdk-internal-9")
-    // take out "jdk-system-out"
-    signaturesFiles = files("forbidden_signatures.txt")
-    ignoreFailures = false
-}
+val elasticsearchVersion = "7.6.1"
 
 dependencies {
-    api("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.6.0")
+    api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
+    api("org.elasticsearch.client:elasticsearch-rest-client:$elasticsearchVersion")
+
     api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.3")
     implementation("org.reflections:reflections:0.9.12")
     implementation("com.squareup:kotlinpoet:1.5.0")
@@ -56,11 +59,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
-
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
     this.sourceFilesExtensions
-
 }
 
 gradlePlugin {
