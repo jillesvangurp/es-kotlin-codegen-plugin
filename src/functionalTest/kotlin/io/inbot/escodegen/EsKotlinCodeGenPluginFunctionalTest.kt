@@ -3,13 +3,13 @@
  */
 package io.inbot.escodegen
 
-import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import kotlin.test.Test
+import org.gradle.testkit.runner.GradleRunner
 
 class EsKotlinCodeGenPluginFunctionalTest {
     val outputDir = "$" + "projectDir/client/build/generatedcode"
-    
+
     @Test fun `can run task`() {
         // Setup the test build
         val projectDir = File("build/functionalTest")

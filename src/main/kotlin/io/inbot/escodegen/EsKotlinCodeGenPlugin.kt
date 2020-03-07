@@ -10,7 +10,7 @@ open class EsKotlinCodeGenPluginExtension {
     var output: String = "build/generated-kotlin-code"
 }
 
-class EsKotlinCodeGenPlugin: Plugin<Project> {
+class EsKotlinCodeGenPlugin : Plugin<Project> {
     override fun apply(project: Project) {
 
         val ext = project.extensions.create("codegen", EsKotlinCodeGenPluginExtension::class.java)
