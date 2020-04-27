@@ -11,10 +11,10 @@ buildscript {
 }
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.3.70"
-    id("com.diffplug.gradle.spotless") version "3.27.1"
+    id("org.jetbrains.kotlin.jvm") version "1.3.72"
+    id("com.diffplug.gradle.spotless") version "3.28.1"
     id("org.jetbrains.dokka") version "0.10.1"
-    id("com.github.ben-manes.versions") version "0.27.0" // gradle dependencyUpdates -Drevision=release
+    id("com.github.ben-manes.versions") version "0.28.0" // gradle dependencyUpdates -Drevision=release
     java
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
@@ -35,13 +35,13 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.6.1"
+val elasticsearchVersion = "7.6.2"
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
     api("org.elasticsearch.client:elasticsearch-rest-client:$elasticsearchVersion")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.3")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.5")
     implementation("org.reflections:reflections:0.9.12")
     implementation("com.squareup:kotlinpoet:1.5.0")
 
