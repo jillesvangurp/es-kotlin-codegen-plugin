@@ -12,7 +12,7 @@ buildscript {
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.72"
-    id("com.diffplug.gradle.spotless") version "3.28.1"
+    id("com.diffplug.gradle.spotless") version "4.0.1"
     id("org.jetbrains.dokka") version "0.10.1"
     id("com.github.ben-manes.versions") version "0.28.0" // gradle dependencyUpdates -Drevision=release
     java
@@ -35,15 +35,15 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.6.2"
+val elasticsearchVersion = "7.7.0"
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
     api("org.elasticsearch.client:elasticsearch-rest-client:$elasticsearchVersion")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.5")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.7")
     implementation("org.reflections:reflections:0.9.12")
-    implementation("com.squareup:kotlinpoet:1.5.0")
+    implementation("com.squareup:kotlinpoet:1.6.0")
 
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
