@@ -12,7 +12,7 @@ buildscript {
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.72"
-    id("com.diffplug.gradle.spotless") version "4.0.1"
+    id("com.diffplug.gradle.spotless") version "4.3.1"
     id("org.jetbrains.dokka") version "0.10.1"
     id("com.github.ben-manes.versions") version "0.28.0" // gradle dependencyUpdates -Drevision=release
     java
@@ -35,7 +35,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.7.0"
+val elasticsearchVersion = "7.8.0"
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
