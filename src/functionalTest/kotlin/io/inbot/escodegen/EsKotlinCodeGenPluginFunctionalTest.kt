@@ -3,19 +3,21 @@
  */
 package io.inbot.escodegen
 
+import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import kotlin.test.Test
-import org.gradle.testkit.runner.GradleRunner
 
 class EsKotlinCodeGenPluginFunctionalTest {
     val outputDir = "$" + "projectDir/client/build/generatedcode"
 
-    @Test fun `can run task`() {
+    @Test
+    fun `can run task`() {
         // Setup the test build
         val projectDir = File("build/functionalTest")
         projectDir.mkdirs()
         projectDir.resolve("settings.gradle").writeText("")
-        projectDir.resolve("build.gradle").writeText("""
+        projectDir.resolve("build.gradle").writeText(
+            """
             plugins {
                 id('com.github.jillesvangurp.codegen')
             }
@@ -23,7 +25,8 @@ class EsKotlinCodeGenPluginFunctionalTest {
             codegen {
                 output = "$outputDir"
             }
-        """)
+        """
+        )
 
         // Run the build
         val runner = GradleRunner.create()

@@ -10,9 +10,9 @@ class EsRestClientReflectService(val classLoader: ClassLoader = Thread.currentTh
         val reflections = Reflections(esClientPackage, SubTypesScanner(false))
         return reflections.allTypes.filter {
             it.endsWith("Client") &&
-                    // two exceptions
-                    !it.startsWith("org.elasticsearch.client.Client") &&
-                    !it.endsWith("RestClient")
+                // two exceptions
+                !it.startsWith("org.elasticsearch.client.Client") &&
+                !it.endsWith("RestClient")
         }.map { classLoader.loadClass(it) }
     }
 }

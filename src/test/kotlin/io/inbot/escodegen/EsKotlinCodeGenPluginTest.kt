@@ -3,9 +3,9 @@
  */
 package io.inbot.escodegen
 
+import org.gradle.testfixtures.ProjectBuilder
 import kotlin.test.Test
 import kotlin.test.assertNotNull
-import org.gradle.testfixtures.ProjectBuilder
 
 class EsKotlinCodeGenPluginTest {
     @Test fun `plugin registers task`() {

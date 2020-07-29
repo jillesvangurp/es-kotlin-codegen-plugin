@@ -1,27 +1,18 @@
 import org.gradle.api.publish.PublishingExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:9.2.1")
-    }
-}
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.72"
-    id("com.diffplug.gradle.spotless") version "4.3.1"
     id("org.jetbrains.dokka") version "0.10.1"
-    id("com.github.ben-manes.versions") version "0.28.0" // gradle dependencyUpdates -Drevision=release
+    id("org.jmailen.kotlinter") version "2.4.1"
+
+    id("com.github.ben-manes.versions") version "0.29.0" // gradle dependencyUpdates -Drevision=release
     java
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
     `maven-publish`
 }
-
-apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
 repositories {
     mavenCentral()
@@ -35,13 +26,13 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.8.0"
+val elasticsearchVersion = "7.8.1"
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
     api("org.elasticsearch.client:elasticsearch-rest-client:$elasticsearchVersion")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.7")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.8")
     implementation("org.reflections:reflections:0.9.12")
     implementation("com.squareup:kotlinpoet:1.6.0")
 
@@ -97,4 +88,8 @@ val functionalTest by tasks.creating(Test::class) {
 val check by tasks.getting(Task::class) {
     // Run the functional tests as part of `check`
     dependsOn(functionalTest)
+}
+
+kotlinter {
+    ignoreFailures = true
 }
