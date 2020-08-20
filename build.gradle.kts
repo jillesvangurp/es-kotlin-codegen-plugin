@@ -3,15 +3,16 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
 plugins {
+    // update to 1.4.0 is blocked on code poet
     id("org.jetbrains.kotlin.jvm") version "1.3.72"
     id("org.jetbrains.dokka") version "0.10.1"
-    id("org.jmailen.kotlinter") version "2.4.1"
 
     id("com.github.ben-manes.versions") version "0.29.0" // gradle dependencyUpdates -Drevision=release
     java
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
     `maven-publish`
+    `project-report` // gradle dependencyReport
 }
 
 repositories {
@@ -26,7 +27,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.8.1"
+val elasticsearchVersion = "7.9.0"
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
@@ -88,8 +89,4 @@ val functionalTest by tasks.creating(Test::class) {
 val check by tasks.getting(Task::class) {
     // Run the functional tests as part of `check`
     dependsOn(functionalTest)
-}
-
-kotlinter {
-    ignoreFailures = true
 }
