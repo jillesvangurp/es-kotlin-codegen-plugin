@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     // update to 1.4.0 is blocked on code poet
-    id("org.jetbrains.kotlin.jvm") version "1.3.72"
-    id("org.jetbrains.dokka") version "0.10.1"
+    id("org.jetbrains.kotlin.jvm") version "1.4.10"
+    id("org.jetbrains.dokka") version "1.4.10.2"
 
-    id("com.github.ben-manes.versions") version "0.29.0" // gradle dependencyUpdates -Drevision=release
+    id("com.github.ben-manes.versions") version "0.33.0" // gradle dependencyUpdates -Drevision=release
     java
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
@@ -27,28 +27,29 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.9.0"
+val elasticsearchVersion = "7.9.3"
+val kotlinVersion = "1.4.10"
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
     api("org.elasticsearch.client:elasticsearch-rest-client:$elasticsearchVersion")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.8")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9")
     implementation("org.reflections:reflections:0.9.12")
-    implementation("com.squareup:kotlinpoet:1.6.0")
+    implementation("com.squareup:kotlinpoet:1.7.2")
 
     // Align versions of all Kotlin components
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:$kotlinVersion"))
 
     // Use the Kotlin JDK 8 standard library.
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 
     // Use the Kotlin test library.
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
 
     // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 }
 
 tasks.withType<KotlinCompile> {
