@@ -61,7 +61,7 @@ gradlePlugin {
     plugins {
         create("codegen") {
             id = "com.github.jillesvangurp.codegen"
-            implementationClass = "io.inbot.escodegen.EsKotlinCodeGenPlugin"
+            implementationClass = "com.jillesvangurp.escodegen.EsKotlinCodeGenPlugin"
         }
     }
 }

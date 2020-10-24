@@ -1,4 +1,4 @@
-package io.inbot.escodegen
+package com.jillesvangurp.escodegen
 
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
@@ -19,9 +19,9 @@ private val genByComment =
 """.trimMargin()
 
 class EsCodeGenerator(
-    private val sourceDir: String = "build/generated-kotlin-code",
-    private val esRestClientReflectService: EsRestClientReflectService = EsRestClientReflectService(),
-    private val sharedCodePackageName: String = "io.inbot.eskotlinwrapper"
+        private val sourceDir: String = "build/generated-kotlin-code",
+        private val esRestClientReflectService: EsRestClientReflectService = EsRestClientReflectService(),
+        private val sharedCodePackageName: String = "com.jillesvangurp.eskotlinwrapper"
 ) {
     fun generateCode() {
         val sharedCodePath = File(sourceDir + File.separatorChar + sharedCodePackageName.replace('.', File.separatorChar))

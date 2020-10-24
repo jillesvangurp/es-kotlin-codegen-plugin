@@ -1,4 +1,4 @@
-package io.inbot.escodegen
+package com.jillesvangurp.escodegen
 
 import org.reflections.Reflections
 import org.reflections.scanners.SubTypesScanner
