@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     // update to 1.4.0 is blocked on code poet
     id("org.jetbrains.kotlin.jvm") version "1.4.20"
-    id("org.jetbrains.dokka") version "1.4.10.2"
+    id("org.jetbrains.dokka") version "1.4.20"
 
     id("com.github.ben-manes.versions") version "0.36.0" // gradle dependencyUpdates -Drevision=release
     java
@@ -27,7 +27,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.10.0"
+val elasticsearchVersion = "7.10.2"
 val kotlinVersion = "1.4.20"
 
 dependencies {
