@@ -27,7 +27,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.10.2"
+val elasticsearchVersion = "7.13.0"
 val kotlinVersion = "1.4.20"
 
 dependencies {
