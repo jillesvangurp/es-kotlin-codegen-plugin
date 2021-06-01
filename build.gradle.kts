@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     // update to 1.4.0 is blocked on code poet
-    id("org.jetbrains.kotlin.jvm") version "1.4.20"
-    id("org.jetbrains.dokka") version "1.4.20"
+    id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    id("org.jetbrains.dokka") version "1.4.32"
 
-    id("com.github.ben-manes.versions") version "0.36.0" // gradle dependencyUpdates -Drevision=release
+    id("com.github.ben-manes.versions") version "0.39.0" // gradle dependencyUpdates -Drevision=release
     java
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
@@ -28,15 +28,15 @@ tasks.withType<KotlinCompile> {
 }
 
 val elasticsearchVersion = "7.13.0"
-val kotlinVersion = "1.4.20"
+val kotlinVersion = "1.5.10"
 
 dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-high-level-client:$elasticsearchVersion")
     api("org.elasticsearch.client:elasticsearch-rest-client:$elasticsearchVersion")
 
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.2")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.5.0")
     implementation("org.reflections:reflections:0.9.12")
-    implementation("com.squareup:kotlinpoet:1.7.2")
+    implementation("com.squareup:kotlinpoet:1.8.0")
 
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:$kotlinVersion"))
