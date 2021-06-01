@@ -27,7 +27,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-val elasticsearchVersion = "7.10.2"
+val elasticsearchVersion = "7.13.0"
 val kotlinVersion = "1.4.20"
 
 dependencies {
@@ -42,14 +42,14 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:$kotlinVersion"))
 
     // Use the Kotlin JDK 8 standard library.
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // Use the Kotlin test library.
-    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
 
     // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
 
 tasks.withType<KotlinCompile> {
