@@ -16,6 +16,10 @@ know what you are doing and want to e.g. create a PR to change the generated cod
 
 Generally, I try to keep up with the stable Elasticsearch releases and tag releases from master. I use jitpack.io to distribute maven/gradle jars. Check the badge at the top of this page.
 
+## Versioning
+
+I tend to mirror Elastics versioning as this plugin runs against their client. So 7.15.0.0 would be the first release intended to work with the 7.15.0 release of the Elasticsearch java client. Elastic tends to do internal refactoring between minor and patch releases and sometimes package names change, or other API changes happen. So, it is important to match the correct version of Elasticsearch and this gradle plugin.
+
 ## LICENSE
 
 Licensed under the [MIT License](LICENSE).
